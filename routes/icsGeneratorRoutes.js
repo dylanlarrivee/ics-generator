@@ -25,28 +25,44 @@ SUMMARY;LANGUAGE=en-us:DylanEvent
 END:VEVENT
 END:VCALENDAR
   `
-  
-  let filename = "myevent2.ics";
+  // Users/Dylan/Documents/Workspace/ics-file-generator/temp-files/20200819-dylanevent.ics
+  let icsTemplatePath = path.join(__dirname, "../temp-files/", "icsTemplate.ics");
+  let filename = "myevent3.ics";
   let absPath = path.join(__dirname, "../temp-files/", filename);
   let relPath = path.join("./temp-files", filename); // path relative to server root
-
-  fs.writeFile(relPath, myInvite, (err) => {
-    console.log("absPath", absPath)
+  
+  fs.readFile(icsTemplatePath, function read(err, data) {
     if (err) {
-      console.log(err);
+        throw err;
     }
-    res.download(absPath, (err) => {
-      if (err) {
-        console.log(err);
-      }
-      fs.unlink(relPath, (err) => {
+    const templateContent = data;
+      fs.writeFile(relPath, templateContent, (err) => {
+        console.log("absPath", absPath)
         if (err) {
-          console.log(err);
+        console.log(err);
         }
-        console.log("FILE [" + filename + "] REMOVED!");
-      });
+        res.download(absPath, (err) => {
+        if (err) {
+            console.log(err);
+        }
+        fs.unlink(relPath, (err) => {
+            if (err) {
+            console.log(err);
+            }
+            console.log("FILE [" + filename + "] REMOVED!");
+        });
+        });
     });
-  });
+    // Invoke the next step here however you like
+    // console.log(content);   // Put all of the code here (not the best solution)
+   // processFile(content);   // Or put the next step in a function and invoke it
+});
+  
+
+
+
+
+
 });
 
 module.exports = router;
