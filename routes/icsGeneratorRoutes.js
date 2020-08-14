@@ -6,6 +6,9 @@ const router = express.Router();
 router.get("/ics-generator", (req, res) => {
   let startDate = req.query.startDate
   let endDate = req.query.endDate
+
+  console.log("startDate", startDate);
+  console.log("endDate", endDate)
   
   let icsTemplatePath = path.join(
     __dirname,
@@ -20,18 +23,7 @@ router.get("/ics-generator", (req, res) => {
     if (err) {
       throw err;
     }
-    let templateContent = data.replace(/DTSTART_VALUE/g, startDate);
-     templateContent = templateContent.replace(
-      /DTEND_VALUE/g,
-      endDate
-    );
-
-    // const templateContent = data.replace(/DTSTART_VALUE/g, "20200813T200000Z");
-    // const templateContent = templateContent.replace(
-    //   /DTEND_VALUE/g,
-    //   "20200813T203000Z"
-    // );
-
+    let templateContent = data.replace('DTSTART_VALUE', startDate).replace('DTEND_VALUE',endDate);
 
     console.log("templateContent", templateContent);
     fs.writeFile(relPath, templateContent, (err) => {
